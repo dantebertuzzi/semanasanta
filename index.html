@@ -2,9 +2,20 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Retiro de Semana Santa – Porta Fidei</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: 'Cinzel';
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cormorant Garamond';
+    font-display: swap;
+  }
+</style>
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -24,11 +35,25 @@
   body {
     background: var(--purple-dark);
     color: var(--cream);
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
     overflow-x: hidden;
   }
 
-  /* ── NOISE OVERLAY ── */
+  .logo-glow {
+    transition: transform 0.4s ease, filter 0.4s ease;
+    filter: drop-shadow(0 0 8px rgba(201,168,76,0.4)) drop-shadow(0 0 20px rgba(201,168,76,0.2));
+    animation: logoGlow 3s ease-in-out infinite;
+  }
+  .logo-glow:hover {
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 14px rgba(232,201,122,0.8)) drop-shadow(0 0 35px rgba(201,168,76,0.5)) drop-shadow(0 0 60px rgba(201,168,76,0.2));
+    animation: none;
+  }
+
+  @keyframes logoGlow {
+    0%, 100% { filter: drop-shadow(0 0 6px rgba(201,168,76,0.3)) drop-shadow(0 0 16px rgba(201,168,76,0.15)); }
+    50%       { filter: drop-shadow(0 0 14px rgba(232,201,122,0.65)) drop-shadow(0 0 32px rgba(201,168,76,0.35)) drop-shadow(0 0 55px rgba(201,168,76,0.15)); }
+  }
   body::before {
     content: '';
     position: fixed; inset: 0;
@@ -98,13 +123,18 @@
   }
 
   h1 {
-    font-family: 'Cinzel', serif;
+    font-family: 'Cinzel', 'Palatino Linotype', 'Book Antiqua', 'Palatino', serif;
     font-size: clamp(2.4rem, 8vw, 5.5rem);
     font-weight: 900;
     line-height: 1.05;
     letter-spacing: 0.03em;
+    color: var(--gold);
     background: linear-gradient(160deg, var(--gold-light) 0%, var(--gold) 40%, #A07830 100%);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
     text-transform: uppercase;
     opacity: 0; animation: fadeUp 1s 0.8s forwards;
   }
@@ -359,7 +389,7 @@
   </div>
 
   <div class="logo-area">
-    <img src="https://raw.githubusercontent.com/dantebertuzzi/semanasanta/refs/heads/main/logo-gold.png" alt="Porta Fidei" style="width:180px; height:auto; transition: transform 0.4s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+    <img src="https://raw.githubusercontent.com/dantebertuzzi/semanasanta/refs/heads/main/logo-gold.png" alt="Porta Fidei" class="logo-glow" style="width:180px; height:auto; cursor: pointer;">
 
   </div>
 
