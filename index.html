@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retiro de Semana Santa – Porta Fidei</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-dim: #8A6A28;
+    --purple-deep: #1A0D2E;
+    --purple-mid: #2D1654;
+    --purple-dark: #0E0718;
+    --cream: #F5EDD8;
+    --white: #FEFAF2;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--purple-dark);
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999;
+    opacity: 0.35;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    position: relative; text-align: center; padding: 2rem 1rem 4rem;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(74,20,80,0.35) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 70% 50%, rgba(0,0,0,0.4) 0%, transparent 55%),
+      url('https://raw.githubusercontent.com/dantebertuzzi/semanasanta/refs/heads/main/bg.png') center center / cover no-repeat;
+  }
+
+  /* Cross silhouettes */
+  .crosses {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 45%; pointer-events: none; overflow: hidden;
+  }
+  .crosses svg { width: 100%; height: 100%; }
+
+  .logo-area {
+    display: flex; flex-direction: column; align-items: center; gap: 0.8rem;
+    margin-bottom: 3.5rem;
+    opacity: 0; animation: fadeUp 1s 0.2s forwards;
+  }
+
+  .logo-icon { width: 70px; height: 70px; }
+
+  .logo-name {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .logo-sub {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(0.55rem, 1.5vw, 0.65rem);
+    letter-spacing: 0.5em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+  }
+
+  .divider-gold {
+    width: 120px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0.5rem auto;
+    opacity: 0; animation: fadeIn 1s 0.5s forwards;
+  }
+
+  .hero-tag {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    color: var(--gold-light);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+    opacity: 0; animation: fadeUp 1s 0.6s forwards;
+  }
+
+  h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2.4rem, 8vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: 0.03em;
+    background: linear-gradient(160deg, var(--gold-light) 0%, var(--gold) 40%, #A07830 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    text-transform: uppercase;
+    opacity: 0; animation: fadeUp 1s 0.8s forwards;
+  }
+
+  h1 span { display: block; }
+
+  .hero-date {
+    margin-top: 1.8rem;
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    font-weight: 400;
+    color: var(--white);
+    letter-spacing: 0.08em;
+    opacity: 0; animation: fadeUp 1s 1s forwards;
+  }
+  .hero-date em { color: var(--gold); font-style: normal; font-weight: 600; }
+
+  .hero-location {
+    margin-top: 1.2rem;
+    font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+    font-weight: 300;
+    color: rgba(245,237,216,0.75);
+    letter-spacing: 0.12em;
+    line-height: 1.7;
+    opacity: 0; animation: fadeUp 1s 1.15s forwards;
+  }
+  .hero-location strong { color: var(--cream); font-weight: 400; font-style: italic; }
+
+  .cta-btn {
+    display: inline-block;
+    margin-top: 2.5rem;
+    padding: 1rem 3rem;
+    background: linear-gradient(135deg, var(--gold) 0%, #A07020 100%);
+    color: var(--purple-deep);
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none; cursor: pointer;
+    position: relative; overflow: hidden;
+    opacity: 0; animation: fadeUp 1s 1.3s forwards;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .cta-btn::before {
+    content: '';
+    position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    transition: left 0.5s;
+  }
+  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(201,168,76,0.4); }
+  .cta-btn:hover::before { left: 100%; }
+
+  /* ── SECTIONS ── */
+  section { padding: 5rem 1.5rem; position: relative; }
+
+  .section-inner { max-width: 860px; margin: 0 auto; }
+
+  /* ── ABOUT ── */
+  .about {
+    background: linear-gradient(180deg, #0E0718 0%, #1A0D2E 100%);
+    text-align: center;
+  }
+
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
+  h2 em { color: var(--gold); font-style: italic; font-family: 'Cormorant Garamond', serif; font-weight: 300; }
+
+  .about p {
+    font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+    font-weight: 300;
+    line-height: 1.9;
+    color: rgba(245,237,216,0.8);
+    max-width: 640px; margin: 0 auto;
+  }
+
+  /* ── PILLARS ── */
+  .pillars {
+    background: linear-gradient(180deg, #1A0D2E 0%, #0E0718 100%);
+  }
+
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .pillar-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 2.2rem 1.8rem;
+    text-align: center;
+    position: relative;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .pillar-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+  .pillar-card::before {
+    content: '';
+    position: absolute; top: -1px; left: 20%; right: 20%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .pillar-card:hover::before { opacity: 1; }
+
+  .pillar-icon {
+    font-size: 2rem; margin-bottom: 1rem;
+    display: block;
+  }
+  .pillar-card h3 {
+    font-family: 'Cinzel', serif; font-size: 0.85rem;
+    letter-spacing: 0.2em; color: var(--gold);
+    text-transform: uppercase; margin-bottom: 0.8rem;
+  }
+  .pillar-card p {
+    font-size: 0.95rem; line-height: 1.75;
+    color: rgba(245,237,216,0.65); font-weight: 300;
+  }
+
+  /* ── INFO STRIP ── */
+  .info-strip {
+    background: linear-gradient(135deg, rgba(201,168,76,0.12), rgba(201,168,76,0.05));
+    border-top: 1px solid rgba(201,168,76,0.25);
+    border-bottom: 1px solid rgba(201,168,76,0.25);
+    padding: 3rem 1.5rem;
+  }
+  .info-grid {
+    max-width: 860px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 2rem; text-align: center;
+  }
+  .info-item dt {
+    font-family: 'Cinzel', serif; font-size: 0.6rem;
+    letter-spacing: 0.4em; color: var(--gold-dim);
+    text-transform: uppercase; margin-bottom: 0.5rem;
+  }
+  .info-item dd {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    font-weight: 400; color: var(--cream);
+    line-height: 1.4;
+  }
+  .info-item dd strong { color: var(--gold); font-weight: 600; }
+
+  /* ── QR / INSCRIPTION ── */
+  .inscription {
+    background: linear-gradient(180deg, #0E0718 0%, #1A0D2E 100%);
+    text-align: center;
+  }
+
+  .qr-wrap {
+    display: inline-block;
+    margin: 2.5rem auto;
+    padding: 1.2rem;
+    background: var(--white);
+    border: 3px solid var(--gold);
+    box-shadow: 0 0 60px rgba(201,168,76,0.25), 0 0 120px rgba(201,168,76,0.1);
+    position: relative;
+  }
+  .qr-wrap img { display: block; width: 180px; height: 180px; }
+
+  .qr-corners::before, .qr-corners::after {
+    content: ''; position: absolute;
+    width: 20px; height: 20px;
+    border-color: var(--gold); border-style: solid;
+  }
+  .qr-corners::before { top: -5px; left: -5px; border-width: 3px 0 0 3px; }
+  .qr-corners::after  { bottom: -5px; right: -5px; border-width: 0 3px 3px 0; }
+
+  .inscription p {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    font-style: italic; font-weight: 300;
+    color: rgba(245,237,216,0.7);
+    line-height: 1.8;
+  }
+
+  .gold-text {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    margin-top: 1rem;
+    display: block;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    border-top: 1px solid rgba(201,168,76,0.15);
+    background: #080312;
+  }
+  footer p {
+    font-size: 0.8rem; letter-spacing: 0.2em;
+    color: rgba(245,237,216,0.3);
+    font-family: 'Cinzel', serif;
+    text-transform: uppercase;
+  }
+  footer span { color: var(--gold-dim); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+
+  /* scroll-reveal */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s, transform 0.8s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 600px) {
+    .pillars-grid { grid-template-columns: 1fr; }
+    .info-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HERO ═══════════ -->
+<header class="hero">
+
+  <!-- Animated cross silhouettes -->
+  <div class="crosses">
+    <svg viewBox="0 0 1200 400" preserveAspectRatio="xMidYMax slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="159" y="80" width="18" height="320" fill="rgba(201,168,76,0.06)"/>
+      <rect x="100" y="160" width="136" height="18" fill="rgba(201,168,76,0.06)"/>
+      <rect x="559" y="20" width="22" height="380" fill="rgba(201,168,76,0.1)"/>
+      <rect x="480" y="100" width="180" height="22" fill="rgba(201,168,76,0.1)"/>
+      <rect x="969" y="100" width="16" height="300" fill="rgba(201,168,76,0.06)"/>
+      <rect x="920" y="175" width="114" height="16" fill="rgba(201,168,76,0.06)"/>
+    </svg>
+  </div>
+
+  <div class="logo-area">
+    <img src="https://raw.githubusercontent.com/dantebertuzzi/semanasanta/refs/heads/main/logo-gold.png" alt="Porta Fidei" style="width:180px; height:auto; transition: transform 0.4s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+
+  </div>
+
+  <div class="divider-gold"></div>
+
+  <p class="hero-tag">Comunidade Porta Fidei apresenta</p>
+
+  <h1>
+    <span>Retiro de</span>
+    <span>Semana Santa</span>
+  </h1>
+
+  <div class="hero-date">
+    <em>02</em> a <em>05</em> de Abril de 2026
+  </div>
+
+  <div class="hero-location">
+    <strong>Chácara Rainha dos Anjos</strong><br>
+    Condomínio Recanto das Águas · Petrolina – PE
+  </div>
+
+  <a href="https://docs.google.com/forms/d/e/1FAIpQLSc-eJ0W7gHEI5qZ0j7YNqCPbEYPqJ_wU62DlPtYxNqNSXaABw/viewform?usp=dialog" target="_blank" class="cta-btn">Inscreva-se</a>
+
+</header>
+
+
+<!-- ═══════════ ABOUT ═══════════ -->
+<section class="about">
+  <div class="section-inner">
+    <p class="section-label">O convite</p>
+    <div class="divider-gold" style="opacity:1; margin-bottom:1.5rem;"></div>
+    <h2>Um tempo de <em>silêncio, graça<br>e encontro com o Senhor</em></h2>
+    <div class="divider-gold" style="opacity:1; margin: 1.5rem auto 2rem;"></div>
+    <p>
+      Será uma oportunidade única para aprofundar a espiritualidade durante a Semana Magna da nossa fé. Para isso, o próprio Senhor nos convida a nos afastarmos da rotina diária e a mergulharmos no mistério da Sua Paixão, Morte e Ressurreição.<br><br>
+      No fim do retiro, poderemos experimentar juntos a verdadeira alegria, a alegria pascal que brota da Ressurreição de Cristo!
+    </p>
+  </div>
+</section>
+
+
+<!-- ═══════════ PILLARS ═══════════ -->
+<section class="pillars">
+  <div class="section-inner">
+    <div style="text-align:center;">
+      <p class="section-label">O que você vai encontrar</p>
+      <h2>Pilares do <em>Retiro</em></h2>
+    </div>
+    <div class="pillars-grid">
+      <div class="pillar-card reveal">
+        <span class="pillar-icon">✝</span>
+        <h3>Eucaristia</h3>
+        <p>Missas e adorações que aprofundam o encontro vivo com Cristo presente no Sacramento.</p>
+      </div>
+      <div class="pillar-card reveal">
+        <span class="pillar-icon">🕯</span>
+        <h3>Oração</h3>
+        <p>Momentos de silêncio, lectio divina e louvor que renovam a alma e fortalecem a fé.</p>
+      </div>
+      <div class="pillar-card reveal">
+        <span class="pillar-icon">🕊</span>
+        <h3>Reconciliação</h3>
+        <p>Sacramento da Confissão disponível — a misericórdia de Deus encontra cada coração.</p>
+      </div>
+      <div class="pillar-card reveal">
+        <span class="pillar-icon">🌿</span>
+        <h3>Comunhão</h3>
+        <p>Vivência comunitária autêntica, partilha e fraternidade num ambiente de retiro.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════ INFO STRIP ═══════════ -->
+<div class="info-strip reveal">
+  <dl class="info-grid">
+    <div class="info-item">
+      <dt>Data</dt>
+      <dd><strong>02 a 05</strong><br>de Abril · 2026</dd>
+    </div>
+    <div class="info-item">
+      <dt>Local</dt>
+      <dd>Chácara<br><strong>Rainha dos Anjos</strong></dd>
+    </div>
+    <div class="info-item">
+      <dt>Endereço</dt>
+      <dd>Recanto das Águas<br>Petrolina – PE</dd>
+    </div>
+    <div class="info-item">
+      <dt>Organização</dt>
+      <dd>Comunidade<br><strong>Porta Fidei</strong></dd>
+    </div>
+  </dl>
+</div>
+
+
+<!-- ═══════════ INSCRIPTION ═══════════ -->
+<section class="inscription" id="inscricao">
+  <div class="section-inner">
+    <p class="section-label">Inscrições abertas</p>
+    <h2>Garanta a<br><em>sua vaga</em></h2>
+    <div class="divider-gold" style="opacity:1; margin: 1.5rem auto;"></div>
+
+    <p>Aponte a câmera do seu celular para o QR Code<br>e realize sua inscrição agora mesmo.</p>
+
+    <div style="display:flex; justify-content:center; margin:2.5rem 0;">
+      <div class="qr-wrap qr-corners">
+        <img src="https://raw.githubusercontent.com/dantebertuzzi/semanasanta/refs/heads/main/qrcode.png" alt="QR Code para inscrição" width="180" height="180" style="display:block;">
+      </div>
+    </div>
+
+    <p><em>Se sentir chamado, faça sua inscrição através do QR Code</em></p>
+    <strong class="gold-text">Venha viver este tempo de graça ✝</strong>
+  </div>
+</section>
+
+
+<!-- ═══════════ MAPA ═══════════ -->
+<section style="padding: 5rem 1.5rem; background: linear-gradient(180deg, #1A0D2E 0%, #0E0718 100%); text-align:center;">
+  <div class="section-inner">
+    <p class="section-label">Como chegar</p>
+    <h2>Localização</h2>
+    <div class="divider-gold" style="opacity:1; margin: 1.2rem auto 2.5rem;"></div>
+    <p style="font-size:clamp(0.95rem,2.5vw,1.15rem); font-weight:300; color:rgba(245,237,216,0.7); margin-bottom:2rem; font-style:italic;">
+      Chácara Rainha dos Anjos · Condomínio Recanto das Águas · Petrolina – PE
+    </p>
+    <div style="
+      border: 1px solid rgba(201,168,76,0.3);
+      box-shadow: 0 0 60px rgba(201,168,76,0.1);
+      overflow: hidden;
+      max-width: 860px;
+      margin: 0 auto;
+    ">
+      <iframe
+        src="https://www.google.com/maps?q=-9.36555067349374,-40.4463199335753&z=16&output=embed"
+        width="100%" height="400" style="border:0; display:block; filter: saturate(0.7) contrast(1.1);"
+        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+    <a href="https://www.google.com/maps?q=-9.36555067349374,-40.4463199335753" target="_blank" style="
+      display:inline-block; margin-top:1.5rem;
+      font-family:'Cinzel',serif; font-size:0.75rem;
+      letter-spacing:0.3em; text-transform:uppercase;
+      color:var(--gold); text-decoration:none;
+      border-bottom:1px solid rgba(201,168,76,0.4);
+      padding-bottom:2px;
+      transition: color 0.3s, border-color 0.3s;
+    " onmouseover="this.style.color='#E8C97A'; this.style.borderColor='#E8C97A'"
+       onmouseout="this.style.color='var(--gold)'; this.style.borderColor='rgba(201,168,76,0.4)'">
+      Abrir no Google Maps ↗
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <p>© 2026 <span>Porta Fidei</span> · Comunidade Católica · Petrolina – PE</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 120);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  reveals.forEach(r => io.observe(r));
+</script>
+</body>
+</html>
